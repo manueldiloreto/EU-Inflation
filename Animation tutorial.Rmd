@@ -5,7 +5,7 @@ date: "2023-01-06"
 output: html_document
 ---
 
-This R Markdown guides the user to create the baseline animation in my [EU Inflation project](https://manueldiloreto.github.io/projects/EU_inflation.html). 
+This R Markdown guides the user to create the <a href https://manueldiloreto.github.io/projects/EU_inflation.html> baseline </a> animation in my [EU Inflation project](https://manueldiloreto.github.io/projects/EU_inflation.html). 
 
 
 ##1. Understanding the data
