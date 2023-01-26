@@ -31,7 +31,7 @@ The library 'gganimate' allows the user to animate a plot made with ggplot2. As 
 EU_inflation <-  ggplot(hicp, aes(x=factor(item, levels = c('bread', 'cheese', 'water', 'coffee', 
                                                    'petrol', 'clothing',
                                                    'electricity', 'gas', 'water_supply')), #By using 'factor' and 'levels', I can visualize the items in any order I choose.
-                         y=hcip_value, 
+                         y=hicp_value, 
                          fill=category)) + 
   geom_bar(stat='identity', width=0.7) +
   scale_y_continuous(labels = function(x) paste0(x, "%"), limits=c(-5,110)) + #'paste0' adds a % symbol after the values on the Y axis.
@@ -59,7 +59,7 @@ The result is a static bar chart that can now be animated.
 EU_inflation <-  ggplot(hicp, aes(x=factor(item, levels = c('bread', 'cheese', 'water', 'coffee', 
                                                    'petrol', 'clothing',
                                                    'electricity', 'gas', 'water_supply')),
-                         y=hcip_value, 
+                         y=hicp_value, 
                          fill=category)) + 
   geom_bar(stat='identity', width=0.7) +
   scale_y_continuous(labels = function(x) paste0(x, "%"), limits=c(-5,110)) +
