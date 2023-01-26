@@ -1,0 +1,103 @@
+---
+title: "EU_inflation_animation"
+author: "Manuel Di Loreto"
+date: "2023-01-06"
+output: html_document
+---
+
+This R Markdown guides the user to create the baseline animation in my [EU Inflation project](https://manueldiloreto.github.io/projects/EU_inflation.html). 
+
+
+##1. Understanding the data
+
+The dataframe I used is a combination of excel files on HICP monthly data downloaded from [Eurostat database](https://ec.europa.eu/eurostat/web/hicp/data/database). For each item I was interested in, I downloaded an .xlsx file containing the HICP value and a date variable (year-month), which is essential for the animation. The raw data was re-elaborated on excel to show the rate of change of HICP from January 2021. 
+
+
+##2. Loading libraries
+
+```{r}
+library(ggplot2)
+library(gganimate)
+library(gifski) # Alternativey, pick a different renderer
+library(animation)
+```
+
+
+##3. Animation
+
+The library 'gganimate' allows the user to animate a plot made with ggplot2. As such, the first step is the creation of a static plot.
+
+```{r}
+EU_inflation <-  ggplot(hicp, aes(x=factor(item, levels = c('bread', 'cheese', 'water', 'coffee', 
+                                                   'petrol', 'clothing',
+                                                   'electricity', 'gas', 'water_supply')), #By using 'factor' and 'levels', I can visualize the items in any order I choose.
+                         y=hcip_value, 
+                         fill=category)) + 
+  geom_bar(stat='identity', width=0.7) +
+  scale_y_continuous(labels = function(x) paste0(x, "%"), limits=c(-5,110)) + #'paste0' adds a % symbol after the values on the Y axis.
+  theme_light() +
+  scale_fill_manual(values=c("#17A398", "#584C8E", "#DC634A")) +
+  theme(axis.text=element_text(size=14), #The following lines (relatively) improve the look of the bar chart.
+        plot.title=element_text(size=32, hjust=0.5, margin=margin(0,0,40,0)),
+        plot.subtitle=element_text(size=28, hjust=0.5, face="bold", margin=margin(0,0,40,0)),
+        legend.text = element_text(size=16),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.direction = "vertical",
+        legend.position = c(0.9, 1.16),
+        legend.title = element_blank(),
+#In standard ggplot2, the axes are not exactly at (0,0). This is particularly problematic for our X axis, considering that HICP values can be negative and we would like bars to move towards the bottom. For this reason, I'm masking the x axis and the x axis' ticks by assigning them the color white.
+        axis.line.x.bottom=element_line(color="white"),
+        axis.ticks.x=element_line(color="white")) +
+    geom_hline(yintercept = 0) #This creates a horizontal line with the equation y=0, effectively "faking" a new x axis.
+```
+
+
+The result is a static bar chart that can now be animated.
+
+```{r}
+EU_inflation <-  ggplot(hicp, aes(x=factor(item, levels = c('bread', 'cheese', 'water', 'coffee', 
+                                                   'petrol', 'clothing',
+                                                   'electricity', 'gas', 'water_supply')),
+                         y=hcip_value, 
+                         fill=category)) + 
+  geom_bar(stat='identity', width=0.7) +
+  scale_y_continuous(labels = function(x) paste0(x, "%"), limits=c(-5,110)) +
+  theme_light() +
+  scale_fill_manual(values=c("#17A398", "#584C8E", "#DC634A")) +
+  theme(axis.text=element_text(size=14),
+        plot.title=element_text(size=32, hjust=0.5, margin=margin(0,0,40,0)),
+        plot.subtitle=element_text(size=28, hjust=0.5, face="bold", margin=margin(0,0,40,0)),
+        legend.text = element_text(size=16),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.direction = "vertical",
+        legend.position = c(0.9, 1.16),
+        legend.title = element_blank(),
+        axis.line.x.bottom=element_line(color="white"),
+        axis.ticks.x=element_line(color="white")) +
+    geom_hline(yintercept = 0) + #This creates a horizontal line with the equation y=0, effectively "faking" a new x axis.
+#animation-specific lines:
+  transition_time(date) + #'transition_time()' allows the user to use a variable that represents a specific point in time (such as a date variable) to be the baseline to represent different states
+  ease_aes('linear') + #'ease_aes' defines how a value change to another during tweening (i.e., in this case, how the bar move from a state to another; linear is the default)
+  labs(title = "Price change in EU-27 since January 2021",
+       subtitle = "{format(frame_time, '%Y-%m')}") #This specific line creates a dynamic date in the subtitle
+```
+
+
+Now, let's use 'animate' to set the length, fps, size, and the renderer of the animation
+
+```{r}
+animate(EU_inflation, duration=45, fps = 40, width = 1200, height = 800, renderer = gifski_renderer())
+```
+
+
+This will create a .gif file in your folder where you can visualize the result.
+If needed, the animation can be exported as an HTML file with the library 'animation.' 
+Note: this will also create in your folder the necessary JavaScript and CSS files and an 'images' folder containing all the frames as .png
+
+```{r}
+saveHTML(animate(EU_inflation, duration=1, fps = 120, device = "current", htmlfile = "EU_inflation.html"), ani.height = 800, ani.width = 1200)
+```
+
+
