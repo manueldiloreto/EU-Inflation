@@ -5,12 +5,12 @@ date: "2023-01-06"
 output: html_document
 ---
 
-This R Markdown guides the user to create the <a href https://manueldiloreto.github.io/projects/EU_inflation.html> baseline </a> animation in my [EU Inflation project](https://manueldiloreto.github.io/projects/EU_inflation.html). 
+This R Markdown guides the user to create the baseline animation in my EU Inflation project (https://manueldiloreto.github.io/projects/EU_inflation.html). 
 
 
 ##1. Understanding the data
 
-The dataframe I used is a combination of excel files on HICP monthly data downloaded from [Eurostat database](https://ec.europa.eu/eurostat/web/hicp/data/database). For each item I was interested in, I downloaded an .xlsx file containing the HICP value and a date variable (year-month), which is essential for the animation. The raw data was re-elaborated on excel to show the rate of change of HICP from January 2021. 
+The dataframe I used is a combination of excel files on HICP monthly data downloaded from Eurostat database (https://ec.europa.eu/eurostat/web/hicp/data/database). For each item I was interested in, I downloaded an .xlsx file containing the HICP value and a date variable (year-month), which is essential for the animation. The raw data was re-elaborated on excel to show the rate of change of HICP from January 2021. 
 
 
 ##2. Loading libraries
